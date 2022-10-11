@@ -10,7 +10,7 @@ window.addEventListener("load", () => {
       this.height = height;
       this.width = width;
       this.enemies = [];
-      this.enemyInterval = 1000;
+      this.enemyInterval = 500;
       this.enemyTimer = 0;
       this.enemyTypes = ["ghost", "worm"];
     }
@@ -33,9 +33,9 @@ window.addEventListener("load", () => {
       if (this.randomEnemy == "worm") this.enemies.push(new Worm(this));
       else if (this.randomEnemy == "ghost") this.enemies.push(new Ghost(this));
 
-      this.enemies.sort((a, b) => {
+      /*this.enemies.sort((a, b) => {
         return a.y - b.y;
-      });
+      });*/
     }
   }
 
@@ -68,11 +68,11 @@ window.addEventListener("load", () => {
     constructor(game) {
       super(game);
       this.x = this.game.width;
-      this.y = Math.random() * this.game.height;
       this.spriteHeight = 171;
       this.spriteWidth = 229;
       this.width = this.spriteWidth * 0.5;
       this.height = this.spriteHeight * 0.5;
+      this.y = this.game.height - this.height;
       this.frame;
       this.image = worm;
       this.vx = Math.random() * 0.1 + 0.1;
@@ -83,14 +83,27 @@ window.addEventListener("load", () => {
     constructor(game) {
       super(game);
       this.x = this.game.width;
-      this.y = Math.random() * this.game.height;
       this.spriteWidth = 261;
       this.spriteHeight = 209;
       this.width = this.spriteWidth * 0.5;
       this.height = this.spriteHeight * 0.5;
+      this.y = Math.random() * this.game.height * 0.6;
       this.frame;
       this.image = ghost;
       this.vx = Math.random() * 0.2 + 0.1;
+      this.angle = 0;
+      this.curve = Math.random() * 3;
+    }
+    update(deltaTime) {
+      super.update(deltaTime);
+      this.y += Math.sin(this.angle) * this.curve;
+      this.angle += 0.04;
+    }
+    draw() {
+      ctx.save();
+      ctx.globalAlpha = 0.7;
+      super.draw(ctx);
+      ctx.restore();
     }
   }
 
