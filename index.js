@@ -12,7 +12,7 @@ window.addEventListener("load", () => {
       this.enemies = [];
       this.enemyInterval = 500;
       this.enemyTimer = 0;
-      this.enemyTypes = ["ghost", "worm"];
+      this.enemyTypes = ["ghost", "worm", "spider"];
     }
     update(deltaTime) {
       if (this.enemyTimer > this.enemyInterval) {
@@ -32,6 +32,8 @@ window.addEventListener("load", () => {
         this.enemyTypes[Math.round(Math.random() * this.enemyTypes.length)];
       if (this.randomEnemy == "worm") this.enemies.push(new Worm(this));
       else if (this.randomEnemy == "ghost") this.enemies.push(new Ghost(this));
+      else if (this.randomEnemy == "spider")
+        this.enemies.push(new Spider(this));
 
       /*this.enemies.sort((a, b) => {
         return a.y - b.y;
@@ -73,7 +75,6 @@ window.addEventListener("load", () => {
       this.width = this.spriteWidth * 0.5;
       this.height = this.spriteHeight * 0.5;
       this.y = this.game.height - this.height;
-      this.frame;
       this.image = worm;
       this.vx = Math.random() * 0.1 + 0.1;
     }
@@ -88,7 +89,6 @@ window.addEventListener("load", () => {
       this.width = this.spriteWidth * 0.5;
       this.height = this.spriteHeight * 0.5;
       this.y = Math.random() * this.game.height * 0.6;
-      this.frame;
       this.image = ghost;
       this.vx = Math.random() * 0.2 + 0.1;
       this.angle = 0;
@@ -104,6 +104,27 @@ window.addEventListener("load", () => {
       ctx.globalAlpha = 0.7;
       super.draw(ctx);
       ctx.restore();
+    }
+  }
+
+  class Spider extends Enemy {
+    constructor(game) {
+      super(game);
+      this.x = Math.random() * this.game.width;
+      this.spriteWidth = 310;
+      this.spriteHeight = 175;
+      this.width = this.spriteWidth * 0.5;
+      this.height = this.spriteHeight * 0.5;
+      this.y = 0 - this.height;
+      this.image = spider;
+      this.vx = 0;
+      this.vy = Math.random() * 0.1 + 0.1;
+      this.maxLength = Math.random() * this.game.height;
+    }
+    update(deltaTime) {
+      super.update(deltaTime);
+      this.y += this.vy;
+      if (this.y > this.maxLength) this.vy *= -1;
     }
   }
 
